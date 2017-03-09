@@ -15,7 +15,13 @@ const styles = StyleSheet.create({
   },
   text: {
     marginLeft: 12,
-    fontSize: 16
+    fontSize: 16,
+    alignSelf: 'flex-start'
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#8E8E8E'
   }
 })
 
@@ -36,6 +42,7 @@ export default class WorkoutsList extends React.Component {
     return (
       <ListView dataSource={this.state.dataSource}
                 renderRow={(data) => Row(data)}
+                renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       />
     )
   }

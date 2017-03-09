@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
   },
   searchAlingment: {
     alignSelf: 'center',
-    width: 200,
-    height: 30
+    width: 250,
+    height: 50
   },
   searchInput: {
     height: 36,
