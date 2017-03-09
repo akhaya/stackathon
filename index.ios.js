@@ -12,8 +12,10 @@ import {
   View,
   TouchableOpacity,
   NavigatorIOS
-} from 'react-native'
+} from 'react-native';
 import Create from './Search'
+import ModifyWorkout from './views/ModifyWorkout'
+
 
 export default class landingView extends Component {
   constructor (props) {
@@ -31,7 +33,7 @@ export default class landingView extends Component {
 
   onPressSaved () {
     this.props.navigator.push({
-      component: dummy,
+      component: ModifyWorkout,
       title: 'Saved'
     })
   }
