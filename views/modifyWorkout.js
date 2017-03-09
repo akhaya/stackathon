@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    alignItems: 'center'
+    alignItems: 'stretch'
   },
   nameInput: {
     height: 40,
@@ -33,8 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around'
   },
   moveBox: {
-    height: 150,
-    width: 250,
+    flex: 1,
     shadowColor: '#e3e3e3',
     shadowOffset: {
       width: 0,
@@ -77,6 +76,16 @@ const styles = StyleSheet.create({
     margin: 15,
     textAlign: 'right'
   },
+  saveBtn:{
+    position: 'absolute',
+    zIndex: 999,
+    borderRadius:50,
+    backgroundColor: '#001C55',
+    width: 60,
+    height: 60,
+    alignSelf: 'center',
+    top: '90%'
+  }
 })
 
 export class WorkoutMove extends Component {
@@ -133,7 +142,8 @@ export default class ModifyWorkout extends Component {
   constructor(){
     super()
     this.state = {
-      workoutName: 'Workout Name'
+      workoutName: 'Workout Name',
+      tempWorkout: []
     }
     this.handleNameChange = this.handleNameChange.bind(this)
   }
@@ -144,19 +154,22 @@ export default class ModifyWorkout extends Component {
 
   render(){
     return (
-      <ScrollView>
-      <View style={styles.containerView}>
-        <TextInput
-          style={styles.nameInput}
-          value={this.state.workoutName}
-          onChangeText={this.handleNameChange}
-          clearButtonMode="while-editing"
-          editable = {true}
-          returnKeyType='done'
-          ></TextInput>
-        {dummyData.map((m,i) => <WorkoutMove key={i} move={m}/>)}
+      <View style={{flex:1}}>
+        <ScrollView>
+        <View style={styles.containerView}>
+          <TextInput
+            style={styles.nameInput}
+            value={this.state.workoutName}
+            onChangeText={this.handleNameChange}
+            clearButtonMode="while-editing"
+            editable = {true}
+            returnKeyType='done'
+            ></TextInput>
+          {dummyData.map((m,i) => <WorkoutMove key={i} move={m}/>)}
+        </View>
+        </ScrollView>
+        <TouchableOpacity style={styles.saveBtn}></TouchableOpacity>
       </View>
-      </ScrollView>
     )
   }
 }
