@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 4,
-    fontSize: 16,
+    fontSize: 18,
     alignSelf: 'flex-start'
   },
   separator: {
@@ -54,25 +54,31 @@ export default class WorkoutsList extends React.Component {
   constructor (props) {
     super(props)
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
-    this.state = {
-      dataSource: ds.cloneWithRows([
-        'burpees',
-        'squats',
-        'dumbbel curl',
-        'dead lift',
-        'front-squat',
-        'crunches',
+    this.workoutList = ['Burpees',
+        'Squats',
+        'Dumbbel curl',
+        'Dead lift',
+        'Front-squat',
+        'Crunches',
         'V-abs',
-        'mountain climbers',
-        'high knees',
-        'row',
-        'bench press',
-        'pull ups',
-        'sit ups',
-        'overhead press'
-      ])
+        'Mountain climbers',
+        'High knees',
+        'Row',
+        'Bench press',
+        'Pull ups',
+        'Sit ups',
+        'Overhead press',
+        'Rest']
+    this.state = {
+      dataSource: ds.cloneWithRows(this.workoutList)
     }
+
+    this.filteredWorkout = this.filteredWorkout.bind(this)
     this.onAdd = this.onAdd.bind(this)
+  }
+  filteredWorkout () {
+    const inputValue = this.props.searchInput
+    return this.workoutList.filter(workout => workout.match(inputValue))
   }
 
   onAdd(workout){
@@ -82,17 +88,18 @@ export default class WorkoutsList extends React.Component {
   render () {
     return (
       <View style={styles.listContainer}>
-      <ListView dataSource={this.state.dataSource}
-                renderRow={(data) => Row(data, this.onAdd)}
+      {this.props.searchInput === '' ? <ListView dataSource={this.state.dataSource}
+                renderRow={(data) => Row(data, this.onAdd))}
+
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-      />
+      /> : this.filteredWorkout().map(workout => Row(workout))}
       </View>
     )
   }
 }
 
 const Row = (workout, onAdd) => (
-  <View style={styles.rowContainer}>
+  <View style={styles.rowContainer} key={workout}>
     <Text style={styles.text}>
       {workout}
      </Text>
@@ -101,5 +108,3 @@ const Row = (workout, onAdd) => (
      </TouchableHighlight>
     </View>
 )
-
-const onAdd = () => {}
