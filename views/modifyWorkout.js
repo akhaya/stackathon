@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
   AppRegistry,
   StyleSheet,
@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   NavigatorIOS,
   ScrollView
-} from 'react-native';
+} from 'react-native'
 import storage from 'react-native-simple-store'
-import store from  '../store'
-import {updateName,removeMove} from '../store/reducer'
+import store from '../store'
+import {updateName, removeMove, updateDuration, updateMode} from '../store/reducer'
 import PlayWorkout from './PlayWorkout'
 
 export const styles = StyleSheet.create({
@@ -49,7 +49,7 @@ export const styles = StyleSheet.create({
   moveText: {
     fontSize: 25,
     textAlign: 'center',
-    paddingTop: 20,
+    paddingTop: 20
   },
   modeBtn: {
     height: 25,
@@ -78,8 +78,8 @@ export const styles = StyleSheet.create({
     margin: 15,
     textAlign: 'right'
   },
-  controlBtn:{
-    borderRadius:50,
+  controlBtn: {
+    borderRadius: 50,
     backgroundColor: '#1084D1',
     width: 100,
     height: 60,
@@ -103,8 +103,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-around',
     top: '90%'
   },
-  removeBtn:{
-    borderRadius:50,
+  removeBtn: {
+    borderRadius: 50,
     backgroundColor: 'rgba(100,0,0,0.1)',
     width: 30,
     height: 30,
@@ -117,7 +117,7 @@ export const styles = StyleSheet.create({
   removeBtnText: {
     color: '#FFFFFF',
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   moveNameWrapper: {
     flexDirection: 'row',
@@ -126,37 +126,39 @@ export const styles = StyleSheet.create({
   }
 })
 
-//MOVE CARD COMPONENT
+// MOVE CARD COMPONENT
 export class WorkoutMove extends Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = props.move
     this.modeToggle = this.modeToggle.bind(this)
     this.handleDurationChange = this.handleDurationChange.bind(this)
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps !== this.props){
+  componentWillReceiveProps (nextProps) {
+    if (nextProps !== this.props) {
       this.setState(nextProps.move)
     }
   }
 
-  modeToggle(){
-    if(this.state.mode ==='Reps') {
-      this.setState({mode:'Timer'})
-    }
-    else {
-      this.setState({mode:'Reps'})
+  modeToggle () {
+    if (this.state.mode === 'Reps') {
+      this.props.submitMode(this.state.id, 'Timer')
+      // this.setState({mode: 'Timer'})
+    } else {
+      this.props.submitMode(this.state.id, 'Reps')
+      // this.setState({mode: 'Reps'})
     }
   }
-  handleDurationChange(newDuration){
+
+  handleDurationChange (newDuration) {
     this.setState({duration: +newDuration})
   }
-  render() {
+  render () {
     const move = this.state
     return (
       <View style={styles.moveBox}>
-        {/* MOVE NAME and REMOVE BTN*/}
+        {/* MOVE NAME and REMOVE BTN */}
         <View style={styles.moveNameWrapper}>
           <Text style={styles.moveText}> {move.move} </Text>
           <TouchableOpacity
@@ -165,65 +167,76 @@ export class WorkoutMove extends Component {
               <Text style={styles.removeBtnText}>X</Text>
           </TouchableOpacity>
         </View>
-        {/* MODE TOGGLE + DURATION*/}
+        {/* MODE TOGGLE + DURATION */}
         <View style={styles.durationWrapper}>
           <TouchableOpacity
             style={styles.modeBtn}
             onPress={this.modeToggle} >
             <Text style={styles.modeBtnText}>{move.mode}</Text>
           </TouchableOpacity>
-          {/* DURATION INPUT*/}
+          {/* DURATION INPUT */}
           <TextInput
             value={`${move.duration}`}
             style={styles.nameInput}
-            onChangeText={this.handleDurationChange}>
+            onChangeText={this.handleDurationChange}
+            onEndEditing = {() => this.props.submitDuration(+move.id, +this.state.duration)}>
           </TextInput>
-          {move.mode==='Timer' && <Text style={styles.mutedLabel}>secs</Text>}
+          {move.mode === 'Timer' && <Text style={styles.mutedLabel}>secs</Text>}
         </View>
       </View>
     )
   }
 }
 
-//MAIN COMPONENT
+// MAIN COMPONENT
 export default class ModifyWorkout extends Component {
-  constructor(props){
+  constructor (props) {
     super(props)
     this.state = store.getState()
     this.handleNameChange = this.handleNameChange.bind(this)
     this.submitName = this.submitName.bind(this)
     this.handleAddMore = this.handleAddMore.bind(this)
+    this.submitDuration = this.submitDuration.bind(this)
+    this.submitMode = this.submitMode.bind(this)
   }
 
-  componentDidMount(){
-    this.unsubscribe = store.subscribe(() =>{
+  componentDidMount () {
+    this.unsubscribe = store.subscribe(() => {
       this.setState(store.getState())
     })
   }
 
-  componentWillUnmount(){
+  componentWillUnmount () {
     this.unsubscribe()
   }
 
-  handleNameChange(newName){
+  handleNameChange (newName) {
     this.setState({name: newName})
   }
-  submitName(){
+  submitName () {
     store.dispatch(updateName(this.state.name))
   }
 
-  handleRemove(moveId){
+  handleRemove (moveId) {
     store.dispatch(removeMove(moveId))
   }
 
-  handleAddMore(){
+  handleAddMore () {
     this.props.navigator.pop()
   }
 
-  render(){
+  submitDuration (id, value) {
+    store.dispatch(updateDuration(id, value))
+  }
+
+  submitMode (id, value) {
+    store.dispatch(updateMode(id, value))
+  }
+
+  render () {
     const workout = this.state.workout
     return (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <ScrollView>
         <View style={styles.containerView}>
           <TextInput
@@ -235,7 +248,12 @@ export default class ModifyWorkout extends Component {
             editable = {true}
             returnKeyType='done'
             ></TextInput>
-          {this.state.workout.map((m,i) => <WorkoutMove key={m.id} move={m} onRemove={this.handleRemove}/>)}
+          {this.state.workout.map((m, i) => <WorkoutMove key={m.id}
+                                                         move={m}
+                                                         onRemove={this.handleRemove}
+                                                         submitDuration={this.submitDuration}
+                                                         submitMode={this.submitMode}
+                                                          />)}
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>

@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     color: '#1084D1'
   },
-  controlBtn:{
-    borderRadius:50,
+  controlBtn: {
+    borderRadius: 50,
     backgroundColor: '#1084D1',
     width: 100,
     height: 60,
