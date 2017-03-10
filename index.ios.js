@@ -14,7 +14,7 @@ import {
   NavigatorIOS
 } from 'react-native';
 import Create from './Search'
-import ModifyWorkout from './views/ModifyWorkout'
+import ModifyWorkout from './views/modifyWorkout'
 
 
 export default class landingView extends Component {
@@ -42,7 +42,7 @@ export default class landingView extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Fitness App
+          FitStack
         </Text>
         <TouchableOpacity style={styles.menuBtn} onPress={this.onPressCreate}>
         <Text style={styles.menuBtnText}> Create </Text>

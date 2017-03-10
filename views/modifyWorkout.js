@@ -12,6 +12,7 @@ import {
 import storage from 'react-native-simple-store'
 import store from  '../store'
 import {updateName,removeMove} from '../store/reducer'
+import PlayWorkout from './PlayWorkout'
 
 export const styles = StyleSheet.create({
   containerView: {
@@ -186,8 +187,8 @@ export class WorkoutMove extends Component {
 
 //MAIN COMPONENT
 export default class ModifyWorkout extends Component {
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
     this.state = store.getState()
     this.handleNameChange = this.handleNameChange.bind(this)
     this.submitName = this.submitName.bind(this)
@@ -241,7 +242,7 @@ export default class ModifyWorkout extends Component {
           <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
             <Text style={styles.playBtnText}>Add</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.controlBtn}>
+          <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayWorkout})}>
             <Text style={styles.playBtnText}>Play</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.controlBtn}>
