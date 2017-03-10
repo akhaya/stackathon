@@ -9,6 +9,7 @@ import {
   NavigatorIOS,
   ScrollView
 } from 'react-native';
+import store from 'react-native-simple-store'
 
 
 const dummyData = ['Burpees', 'High-Knees', 'Crunches', 'Push-Ups']
@@ -18,7 +19,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
+    paddingBottom: 70
   },
   nameInput: {
     height: 40,
@@ -44,7 +46,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.75
   },
   moveText: {
-    fontSize: 20,
+    fontSize: 25,
     textAlign: 'center',
     paddingRight: 20,
     paddingTop: 20,
@@ -76,15 +78,31 @@ const styles = StyleSheet.create({
     margin: 15,
     textAlign: 'right'
   },
-  saveBtn:{
-    position: 'absolute',
-    zIndex: 999,
+  controlBtn:{
     borderRadius:50,
     backgroundColor: '#001C55',
-    width: 60,
+    width: 100,
     height: 60,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 25,
+    marginRight: 25
+  },
+  playBtnText: {
+    color: '#A6E1FA',
+    fontSize: 20,
+    textAlign: 'center',
+    width: 50
+  },
+  controlContainer: {
     alignSelf: 'center',
-    top: '90%'
+    position: 'absolute',
+    zIndex: 999,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    top: '90%',
+    backgroundColor: 'rgba(0,0,0,0)'
   }
 })
 
@@ -168,7 +186,14 @@ export default class ModifyWorkout extends Component {
           {dummyData.map((m,i) => <WorkoutMove key={i} move={m}/>)}
         </View>
         </ScrollView>
-        <TouchableOpacity style={styles.saveBtn}></TouchableOpacity>
+        <View style={styles.controlContainer}>
+          <TouchableOpacity style={styles.controlBtn}>
+            <Text style={styles.playBtnText}>Play</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.controlBtn}>
+            <Text style={styles.playBtnText}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
