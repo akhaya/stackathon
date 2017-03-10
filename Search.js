@@ -37,21 +37,30 @@ export default class Create extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      text: 'Search'
+      text: ''
     }
+    this.onSearchChange = this.onSearchChange.bind(this)
   }
+  onSearchChange (newText) {
+    this.setState({text: newText})
+  }
+
   render () {
     return (
-      <View style={styles.container}>
-        <ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
           <View style={styles.searchAlingment}>
             <TextInput style={styles.searchInput}
+                       placeholder='Search'
+                       onChangeText={this.onSearchChange}
                        value={this.state.text}
+                       maxLength = {40}
+                       clearButtonMode="while-editing"
             />
           </View>
-            <WorkoutsList />
-        </ScrollView>
-      </View>
+            <WorkoutsList searchInput={this.state.text}/>
+        </View>
+      </ScrollView>
     )
   }
 }
