@@ -8,7 +8,7 @@ import {
   TouchableOpacity
 } from 'react-native'
 import WorkoutsList from './WorkoutsList'
-import ModifyWorkout from './views/ModifyWorkout'
+import ModifyWorkout from './views/modifyWorkout'
 
 const styles = StyleSheet.create({
   container: {
