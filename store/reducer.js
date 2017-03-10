@@ -1,19 +1,27 @@
 //CONSTANTS
 const ADD_MOVE = 'ADD_MOVE'
 const UPDATE_NAME = 'UPDATE_NAME'
+const REMOVE_MOVE = 'REMOVE_MOVE'
 //ACTION CREATORS
 
 export const addMove = (move) => {
   return {
     type: ADD_MOVE,
-    move: move
+    move
   }
 }
 
 export const updateName = (name) => {
   return {
     type: UPDATE_NAME,
-    name: name
+    name
+  }
+}
+
+export const removeMove = (moveId) => {
+  return {
+    type: REMOVE_MOVE,
+    moveId
   }
 }
 
@@ -43,6 +51,11 @@ const reducer = (state=initialState, action) => {
       })
       counter ++
       break;
+
+    case REMOVE_MOVE: {
+      newState.workout = newState.workout.filter(m => m.id !== action.moveId)
+      break;
+    }
 
     case UPDATE_NAME:
       newState.name = action.name

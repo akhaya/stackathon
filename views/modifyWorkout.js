@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import storage from 'react-native-simple-store'
 import store from  '../store'
-import {updateName} from '../store/reducer'
+import {updateName,removeMove} from '../store/reducer'
 
 const styles = StyleSheet.create({
   containerView: {
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
   moveText: {
     fontSize: 25,
     textAlign: 'center',
-    paddingRight: 20,
     paddingTop: 20,
   },
   modeBtn: {
@@ -100,8 +99,28 @@ const styles = StyleSheet.create({
     zIndex: 999,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    top: '90%',
-    backgroundColor: 'rgba(0,0,0,0)'
+    top: '90%'
+  },
+  removeBtn:{
+    borderRadius:50,
+    backgroundColor: 'rgba(100,0,0,0.1)',
+    width: 30,
+    height: 30,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 25,
+    marginRight: 25
+  },
+  removeBtnText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    textAlign: 'center',
+  },
+  moveNameWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-end'
   }
 })
 
@@ -112,6 +131,12 @@ export class WorkoutMove extends Component {
     this.state = props.move
     this.modeToggle = this.modeToggle.bind(this)
     this.handleDurationChange = this.handleDurationChange.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps !== this.props){
+      this.setState(nextProps.move)
+    }
   }
 
   modeToggle(){
@@ -129,8 +154,15 @@ export class WorkoutMove extends Component {
     const move = this.state
     return (
       <View style={styles.moveBox}>
-        {/* MOVE NAME*/}
-        <Text style={styles.moveText}> {move.move} </Text>
+        {/* MOVE NAME and REMOVE BTN*/}
+        <View style={styles.moveNameWrapper}>
+          <Text style={styles.moveText}> {move.move} </Text>
+          <TouchableOpacity
+              style={styles.removeBtn}
+              onPress={() => this.props.onRemove(move.id)} >
+              <Text style={styles.removeBtnText}>X</Text>
+          </TouchableOpacity>
+        </View>
         {/* MODE TOGGLE + DURATION*/}
         <View style={styles.durationWrapper}>
           <TouchableOpacity
@@ -177,6 +209,10 @@ export default class ModifyWorkout extends Component {
     store.dispatch(updateName(this.state.name))
   }
 
+  handleRemove(moveId){
+    store.dispatch(removeMove(moveId))
+  }
+
   render(){
     const workout = this.state.workout
     return (
@@ -192,7 +228,7 @@ export default class ModifyWorkout extends Component {
             editable = {true}
             returnKeyType='done'
             ></TextInput>
-          {this.state.workout.map((m,i) => <WorkoutMove key={i} move={m}/>)}
+          {this.state.workout.map((m,i) => <WorkoutMove key={m.id} move={m} onRemove={this.handleRemove}/>)}
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
