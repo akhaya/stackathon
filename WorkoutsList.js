@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     padding: 12,
     alignItems: 'stretch'
   },
