@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native'
-import store from  './store'
+import store from './store'
 import {addMove} from './store/reducer'
 
 const styles = StyleSheet.create({
@@ -55,20 +55,20 @@ export default class WorkoutsList extends React.Component {
     super(props)
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.workoutList = ['Burpees',
-        'Squats',
-        'Dumbbel curl',
-        'Dead lift',
-        'Front-squat',
-        'Crunches',
-        'V-abs',
-        'Mountain climbers',
-        'High knees',
-        'Row',
-        'Bench press',
-        'Pull ups',
-        'Sit ups',
-        'Overhead press',
-        'Rest']
+      'Squats',
+      'Dumbbel curl',
+      'Dead lift',
+      'Front-squat',
+      'Crunches',
+      'V-abs',
+      'Mountain climbers',
+      'High knees',
+      'Row',
+      'Bench press',
+      'Pull ups',
+      'Sit ups',
+      'Overhead press',
+      'Rest']
     this.state = {
       dataSource: ds.cloneWithRows(this.workoutList)
     }
@@ -81,7 +81,7 @@ export default class WorkoutsList extends React.Component {
     return this.workoutList.filter(workout => workout.match(inputValue))
   }
 
-  onAdd(workout){
+  onAdd (workout) {
     store.dispatch(addMove(workout))
   }
 
@@ -89,7 +89,7 @@ export default class WorkoutsList extends React.Component {
     return (
       <View style={styles.listContainer}>
       {this.props.searchInput === '' ? <ListView dataSource={this.state.dataSource}
-                renderRow={(data) => Row(data, this.onAdd))}
+                renderRow={(data) => Row(data, this.onAdd)}
 
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       /> : this.filteredWorkout().map(workout => Row(workout))}

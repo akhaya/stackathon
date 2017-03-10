@@ -73,8 +73,8 @@ export default class Create extends React.Component {
 
   render () {
     return (
-      <ScrollView>
-        <View style={styles.container}>
+      <View style={styles.container}>
+        <ScrollView>
           <View style={styles.searchAlingment}>
             <TextInput style={styles.searchInput}
                        placeholder='Search'
