@@ -15,7 +15,9 @@ const styles = StyleSheet.create({
   listContainer: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#1084D1'
+    borderColor: '#1084D1',
+    margin: 30,
+    marginBottom: 70
   },
   rowContainer: {
     flex: 1,

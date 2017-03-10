@@ -13,7 +13,7 @@ import storage from 'react-native-simple-store'
 import store from  '../store'
 import {updateName,removeMove} from '../store/reducer'
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   containerView: {
     flex: 1,
     flexDirection: 'column',
@@ -27,7 +27,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     padding: 4,
     margin: 15,
-    textAlign: 'center'
+    textAlign: 'center',
+    color: '#001C55'
   },
   workoutView: {
     flex: 3,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   },
   controlBtn:{
     borderRadius:50,
-    backgroundColor: '#001C55',
+    backgroundColor: '#1084D1',
     width: 100,
     height: 60,
     flexDirection: 'row',
@@ -190,6 +191,7 @@ export default class ModifyWorkout extends Component {
     this.state = store.getState()
     this.handleNameChange = this.handleNameChange.bind(this)
     this.submitName = this.submitName.bind(this)
+    this.handleAddMore = this.handleAddMore.bind(this)
   }
 
   componentDidMount(){
@@ -213,6 +215,10 @@ export default class ModifyWorkout extends Component {
     store.dispatch(removeMove(moveId))
   }
 
+  handleAddMore(){
+    this.props.navigator.pop()
+  }
+
   render(){
     const workout = this.state.workout
     return (
@@ -232,6 +238,9 @@ export default class ModifyWorkout extends Component {
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
+          <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
+            <Text style={styles.playBtnText}>Add</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.controlBtn}>
             <Text style={styles.playBtnText}>Play</Text>
           </TouchableOpacity>
