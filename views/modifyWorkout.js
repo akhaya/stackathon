@@ -9,10 +9,9 @@ import {
   NavigatorIOS,
   ScrollView
 } from 'react-native';
-import store from 'react-native-simple-store'
-
-
-const dummyData = ['Burpees', 'High-Knees', 'Crunches', 'Push-Ups']
+import storage from 'react-native-simple-store'
+import store from  '../store'
+import {updateName} from '../store/reducer'
 
 const styles = StyleSheet.create({
   containerView: {
@@ -106,13 +105,11 @@ const styles = StyleSheet.create({
   }
 })
 
+//MOVE CARD COMPONENT
 export class WorkoutMove extends Component {
   constructor(props){
     super(props)
-    this.state = {
-      mode: 'Reps',
-      duration: 10
-    }
+    this.state = props.move
     this.modeToggle = this.modeToggle.bind(this)
     this.handleDurationChange = this.handleDurationChange.bind(this)
   }
@@ -129,26 +126,25 @@ export class WorkoutMove extends Component {
     this.setState({duration: +newDuration})
   }
   render() {
-    const move = this.props.move
-    console.log(this.state.mode)
+    const move = this.state
     return (
       <View style={styles.moveBox}>
         {/* MOVE NAME*/}
-        <Text style={styles.moveText}> {move} </Text>
+        <Text style={styles.moveText}> {move.move} </Text>
         {/* MODE TOGGLE + DURATION*/}
         <View style={styles.durationWrapper}>
           <TouchableOpacity
             style={styles.modeBtn}
             onPress={this.modeToggle} >
-            <Text style={styles.modeBtnText}>{this.state.mode}</Text>
+            <Text style={styles.modeBtnText}>{move.mode}</Text>
           </TouchableOpacity>
           {/* DURATION INPUT*/}
           <TextInput
-            value={`${this.state.duration}`}
+            value={`${move.duration}`}
             style={styles.nameInput}
             onChangeText={this.handleDurationChange}>
           </TextInput>
-          {this.state.mode==='Timer' && <Text style={styles.mutedLabel}>secs</Text>}
+          {move.mode==='Timer' && <Text style={styles.mutedLabel}>secs</Text>}
         </View>
       </View>
     )
@@ -159,31 +155,44 @@ export class WorkoutMove extends Component {
 export default class ModifyWorkout extends Component {
   constructor(){
     super()
-    this.state = {
-      workoutName: 'Workout Name',
-      tempWorkout: []
-    }
+    this.state = store.getState()
     this.handleNameChange = this.handleNameChange.bind(this)
+    this.submitName = this.submitName.bind(this)
+  }
+
+  componentDidMount(){
+    this.unsubscribe = store.subscribe(() =>{
+      this.setState(store.getState())
+    })
+  }
+
+  componentWillUnmount(){
+    this.unsubscribe()
   }
 
   handleNameChange(newName){
-    this.setState({workoutName: newName})
+    this.setState({name: newName})
+  }
+  submitName(){
+    store.dispatch(updateName(this.state.name))
   }
 
   render(){
+    const workout = this.state.workout
     return (
       <View style={{flex:1}}>
         <ScrollView>
         <View style={styles.containerView}>
           <TextInput
             style={styles.nameInput}
-            value={this.state.workoutName}
+            value={this.state.name}
             onChangeText={this.handleNameChange}
+            onEndEditing = {this.submitName}
             clearButtonMode="while-editing"
             editable = {true}
             returnKeyType='done'
             ></TextInput>
-          {dummyData.map((m,i) => <WorkoutMove key={i} move={m}/>)}
+          {this.state.workout.map((m,i) => <WorkoutMove key={i} move={m}/>)}
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
