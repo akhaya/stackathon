@@ -8,12 +8,16 @@ import {
   TouchableHighlight,
   Image
 } from 'react-native'
+import store from  './store'
+import {addMove} from './store/reducer'
 
 const styles = StyleSheet.create({
   listContainer: {
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: '#1084D1'
+    borderColor: '#1084D1',
+    margin: 30,
+    marginBottom: 70
   },
   rowContainer: {
     flex: 1,
@@ -68,12 +72,18 @@ export default class WorkoutsList extends React.Component {
         'overhead press'
       ])
     }
+    this.onAdd = this.onAdd.bind(this)
   }
+
+  onAdd(workout){
+    store.dispatch(addMove(workout))
+  }
+
   render () {
     return (
       <View style={styles.listContainer}>
       <ListView dataSource={this.state.dataSource}
-                renderRow={(data) => Row(data)}
+                renderRow={(data) => Row(data, this.onAdd)}
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       />
       </View>
@@ -81,12 +91,12 @@ export default class WorkoutsList extends React.Component {
   }
 }
 
-const Row = (workout) => (
+const Row = (workout, onAdd) => (
   <View style={styles.rowContainer}>
     <Text style={styles.text}>
       {workout}
      </Text>
-     <TouchableHighlight style={styles.addButton} onPress={onAdd}>
+     <TouchableHighlight style={styles.addButton} onPress={() => onAdd(workout)}>
        <Image source={require('./images/plus.png')} style={styles.image}/>
      </TouchableHighlight>
     </View>

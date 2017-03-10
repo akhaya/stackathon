@@ -32,10 +32,10 @@ export default class landingView extends Component {
   }
 
   onPressSaved () {
-    this.props.navigator.push({
-      component: ModifyWorkout,
-      title: 'Saved'
-    })
+    // this.props.navigator.push({
+    //   component: ModifyWorkout,
+    //   title: 'Saved'
+    // })
   }
 
   render () {
