@@ -12,15 +12,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 30,
-    marginTop: 70,
-    alignItems: 'stretch',
-    justifyContent: 'space-around',
     flexDirection: 'column'
   },
   searchAlingment: {
     alignSelf: 'center',
-    width: 250,
-    height: 50
+    flex: 1,
+    width: 315,
+    height: 50,
+    margin: 10
   },
   searchInput: {
     height: 36,
@@ -28,9 +27,9 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     borderWidth: 1,
-    borderColor: '#A6E1FA',
+    borderColor: '#1084D1',
     borderRadius: 8,
-    color: '#A6E1FA'
+    color: '#1084D1'
   }
 })
 
@@ -44,12 +43,14 @@ export default class Create extends React.Component {
   render () {
     return (
       <View style={styles.container}>
+        <ScrollView>
           <View style={styles.searchAlingment}>
-          <TextInput style={styles.searchInput}
-                     value={this.state.text}
-          />
+            <TextInput style={styles.searchInput}
+                       value={this.state.text}
+            />
           </View>
-          <WorkoutsList />
+            <WorkoutsList />
+        </ScrollView>
       </View>
     )
   }
