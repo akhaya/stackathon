@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import {
   StyleSheet,
   Text,
@@ -6,7 +6,8 @@ import {
   TextInput,
   ListView,
   TouchableHighlight,
-  Image
+  Image,
+  Animated
 } from 'react-native'
 import store from './store'
 import {addMove} from './store/reducer'
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 12,
-    alignItems: 'stretch'
+    alignItems: 'center'
   },
   text: {
     margin: 4,
@@ -89,22 +90,54 @@ export default class WorkoutsList extends React.Component {
     return (
       <View style={styles.listContainer}>
       {this.props.searchInput === '' ? <ListView dataSource={this.state.dataSource}
-                renderRow={(data) => Row(data, this.onAdd)}
+                renderRow={(data) => <Row workout={data} onAdd={this.onAdd} key={data}/>}
 
                 renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
-      /> : this.filteredWorkout().map(workout => Row(workout))}
+      /> : this.filteredWorkout().map(workout => <Row workout={workout} onAdd={this.onAdd} key={workout}/>)}
       </View>
     )
   }
 }
 
-const Row = (workout, onAdd) => (
-  <View style={styles.rowContainer} key={workout}>
-    <Text style={styles.text}>
-      {workout}
-     </Text>
-     <TouchableHighlight style={styles.addButton} onPress={() => onAdd(workout)}>
-       <Image source={require('./images/plus.png')} style={styles.image}/>
-     </TouchableHighlight>
-    </View>
-)
+class Row extends Component {
+  constructor(props){
+    super(props)
+    this.state ={
+      visible: false,
+      fadeAnim: new Animated.Value(1)
+    }
+    this.handleAdd = this.handleAdd.bind(this)
+  }
+
+  handleAdd(){
+    this.props.onAdd(this.props.workout);
+    this.setState({
+          visible: false,
+          fadeAnim: new Animated.Value(1)
+    }, () => {
+      this.setState({visible: true}, () =>{
+        Animated.timing(
+            this.state.fadeAnim,
+            {toValue:0}
+            ).start()
+      })
+    })
+
+
+  }
+
+  render(){
+    return(
+      <View style={styles.rowContainer} key={this.props.workout}>
+        <Text style={styles.text}>
+          {this.props.workout}
+        </Text>
+        {this.state.visible?
+        <Animated.Text style={{opacity: this.state.fadeAnim, color: '#24e289',fontSize: 16}}>Added!</Animated.Text>: null }
+        <TouchableHighlight style={styles.addButton} onPress={this.handleAdd}>
+          <Image source={require('./images/plus.png')} style={styles.image}/>
+        </TouchableHighlight>
+      </View>
+    )
+  }
+}

@@ -7,7 +7,8 @@ import {
   View,
   TouchableOpacity,
   NavigatorIOS,
-  ScrollView
+  ScrollView,
+  AlertIOS
 } from 'react-native'
 import storage from 'react-native-simple-store'
 import store from '../store'
@@ -242,7 +243,7 @@ export default class ModifyWorkout extends Component {
       }).then(() =>{
         return storage.get('list')
       }).then(list =>{
-        console.log('SAVED LIST', list)
+        AlertIOS.alert('Saved', `${savedWorkout.name} saved`)
       })
       .catch(console.error)
   }
