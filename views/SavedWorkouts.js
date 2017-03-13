@@ -81,7 +81,6 @@ export default class SavedWorkoutView  extends Component {
   }
 
   render () {
-    console.log('RENDERING', this.state)
     return (
       <View style={{flex: 1}}>
         <ScrollView>

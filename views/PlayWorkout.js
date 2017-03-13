@@ -45,6 +45,7 @@ export class MoveCard extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    clearInterval(this.state.intervalId)
     this.createTimer(nextProps)
   }
 
@@ -53,10 +54,8 @@ export class MoveCard extends Component {
   }
 
   createTimer (props) {
-    console.log('SettingTimer', props.move.mode)
     this.setState({duration: props.move.duration, intervalId: null})
     if (props.move.mode === 'Timer') {
-      console.log('INSIDE IF')
       const id = setInterval(
         function () {
           if (this.state.duration === 0) {
