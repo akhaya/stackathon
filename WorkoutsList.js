@@ -56,7 +56,7 @@ export default class WorkoutsList extends React.Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
     this.workoutList = ['Burpees',
       'Squats',
-      'Dumbbel curl',
+      'Dumbbell curl',
       'Dead lift',
       'Front-squat',
       'Crunches',

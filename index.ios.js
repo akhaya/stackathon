@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import Create from './Search'
 import ModifyWorkout from './views/modifyWorkout'
+import SavedWorkouts from './views/SavedWorkouts'
 
 
 export default class landingView extends Component {
@@ -32,10 +33,10 @@ export default class landingView extends Component {
   }
 
   onPressSaved () {
-    // this.props.navigator.push({
-    //   component: ModifyWorkout,
-    //   title: 'Saved'
-    // })
+    this.props.navigator.push({
+      component: SavedWorkouts,
+      title: 'Saved'
+    })
   }
 
   render () {

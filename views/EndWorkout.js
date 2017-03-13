@@ -18,7 +18,13 @@ const endStyles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center'
-  }
+  },
+  playBtnText: {
+    color: '#A6E1FA',
+    fontSize: 20,
+    textAlign: 'center',
+    width: 60
+  },
 })
 
 export default EndWorkout = (props) => {
@@ -28,8 +34,10 @@ export default EndWorkout = (props) => {
         <Text style={styles.nameInput}> You're Done! </Text>
       </View>
       <View style={styles.controlContainer}>
-          <TouchableOpacity style={styles.controlBtn} onPress={() => props.navigator.popN(3)}>
-              <Text style={styles.playBtnText}>Menu</Text>
+          <TouchableOpacity style={styles.controlBtn} onPress={() => {
+            props.navigator.popToTop()
+          }}>
+              <Text style={endStyles.playBtnText}>Menu</Text>
           </TouchableOpacity>
       </View>
     </View>

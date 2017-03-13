@@ -4,6 +4,7 @@ const UPDATE_NAME = 'UPDATE_NAME'
 const REMOVE_MOVE = 'REMOVE_MOVE'
 const UPDATE_DURATION = 'UPDATE_DURATION'
 const UPDATE_MODE = 'UPDATE_MODE'
+const SET_WORKOUT = 'SET_WORKOUT'
 
 // ACTION CREATORS
 
@@ -39,6 +40,13 @@ export const updateMode = (moveId, mode) => {
     type: UPDATE_MODE,
     moveId,
     mode
+  }
+}
+
+export const setWorkout = (workout) => {
+  return {
+    type: SET_WORKOUT,
+    workout
   }
 }
 
@@ -93,6 +101,9 @@ const reducer = (state = initialState, action) => {
         }
       })
       break
+
+    case SET_WORKOUT:
+      return action.workout
 
     default:
       return state

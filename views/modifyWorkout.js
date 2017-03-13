@@ -13,6 +13,7 @@ import storage from 'react-native-simple-store'
 import store from '../store'
 import {updateName, removeMove, updateDuration, updateMode} from '../store/reducer'
 import PlayWorkout from './PlayWorkout'
+import Search from '../Search'
 
 export const styles = StyleSheet.create({
   containerView: {
@@ -195,9 +196,9 @@ export default class ModifyWorkout extends Component {
     this.state = store.getState()
     this.handleNameChange = this.handleNameChange.bind(this)
     this.submitName = this.submitName.bind(this)
-    this.handleAddMore = this.handleAddMore.bind(this)
     this.submitDuration = this.submitDuration.bind(this)
     this.submitMode = this.submitMode.bind(this)
+    this.handleSave = this.handleSave.bind(this)
   }
 
   componentDidMount () {
@@ -221,16 +222,29 @@ export default class ModifyWorkout extends Component {
     store.dispatch(removeMove(moveId))
   }
 
-  handleAddMore () {
-    this.props.navigator.pop()
-  }
-
   submitDuration (id, value) {
     store.dispatch(updateDuration(id, value))
   }
 
   submitMode (id, value) {
     store.dispatch(updateMode(id, value))
+  }
+
+  handleSave(){
+    const savedWorkout = store.getState() // {'name' []}
+    storage.get('list')
+      .then(list => {
+        if(!list){
+          return storage.save('list', {[`${savedWorkout.name}`]: savedWorkout.workout})
+        }else{
+          return storage.update('list', {[`${savedWorkout.name}`]: savedWorkout.workout})
+        }
+      }).then(() =>{
+        return storage.get('list')
+      }).then(list =>{
+        console.log('SAVED LIST', list)
+      })
+      .catch(console.error)
   }
 
   render () {
@@ -258,13 +272,13 @@ export default class ModifyWorkout extends Component {
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
-          <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
+          <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: Search})}>
             <Text style={styles.playBtnText}>Add</Text>
           </TouchableOpacity>
             <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayWorkout})}>
               <Text style={styles.playBtnText}>Play</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.controlBtn}>
+            <TouchableOpacity style={styles.controlBtn} onPress={this.handleSave}>
               <Text style={styles.playBtnText}>Save</Text>
             </TouchableOpacity>
         </View>
