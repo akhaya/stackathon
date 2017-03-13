@@ -13,6 +13,24 @@ import store from '../store'
 import {styles} from './modifyWorkout'
 import EndWorkout from './EndWorkout'
 
+const playStyles = StyleSheet.create({
+  moveBox: {
+    flex: 1,
+    shadowColor: '#e3e3e3',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    margin: 10,
+    shadowRadius: 5,
+    shadowOpacity: 0.75
+  },
+  durationWrapper: {
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+})
+
 export class MoveCard extends Component {
   constructor (props) {
     super(props)
@@ -23,22 +41,27 @@ export class MoveCard extends Component {
     this.createTimer = this.createTimer.bind(this)
   }
   componentDidMount () {
-    this.createTimer()
+    this.createTimer(this.props)
   }
 
   componentWillReceiveProps (nextProps) {
     this.createTimer(nextProps)
   }
 
-  createTimer (nextProps) {
-    console.log('A NEW COMPONENT HAS MOUNTED')
-    this.setState({duration: nextProps.move.duration, intervalId: null})
-    if (nextProps.move.mode === 'Timer') {
+  componentWillUnmount(){
+    clearInterval(this.state.intervalId)
+  }
+
+  createTimer (props) {
+    console.log('SettingTimer', props.move.mode)
+    this.setState({duration: props.move.duration, intervalId: null})
+    if (props.move.mode === 'Timer') {
+      console.log('INSIDE IF')
       const id = setInterval(
         function () {
           if (this.state.duration === 0) {
             clearInterval(this.state.intervalId)
-            nextProps.onTap()
+            props.onTap()
           } else {
             this.setState({duration: this.state.duration - 1})
           }
@@ -52,23 +75,22 @@ export class MoveCard extends Component {
     const move = this.props.move
 
     return (
-      <TouchableOpacity style={styles.moveBox}
+      <TouchableOpacity style={playStyles.moveBox}
         onPress={this.props.onTap}
         >
         {/* MOVE NAME and REMOVE BTN */}
         <View style={styles.moveNameWrapper}>
           <Text style={styles.moveText}> {move.move} </Text>
         </View>
-        {/* MODE TOGGLE + DURATION */}
-        <View style={styles.durationWrapper}>
-        <Text style={styles.modeBtnText}>{move.mode}</Text>
-          {/* DURATION INPUT */}
+        {/* MODE*/}
+        <View style={playStyles.durationWrapper}>
+          {/* DURATION */}
           <TextInput
             value={`${this.state.duration}`}
             style={styles.nameInput}
             editable={false}>
           </TextInput>
-          {move.mode === 'Timer' && <Text style={styles.mutedLabel}>secs</Text>}
+          <Text style={styles.mutedLabel}>{move.mode === 'Timer'? "SECS" : "REPS" }</Text>
         </View>
       </TouchableOpacity>
     )
@@ -88,8 +110,6 @@ export default class PlayView extends Component {
   }
 
   handleCardChange () {
-    console.log('LEN', this.state.workout.length)
-    console.log('Im inside CARD CHANGEEE', this.state.card)
     if (this.state.card + 1 < this.state.workout.length) {
       this.setState({card: this.state.card + 1})
     } else {
@@ -111,14 +131,8 @@ export default class PlayView extends Component {
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
-          <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
-            <Text style={styles.playBtnText}>Add</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayView})}>
-            <Text style={styles.playBtnText}>Play</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlBtn}>
-            <Text style={styles.playBtnText}>Save</Text>
+          <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: EndWorkout})}>
+            <Text style={styles.playBtnText}>End</Text>
           </TouchableOpacity>
         </View>
       </View>

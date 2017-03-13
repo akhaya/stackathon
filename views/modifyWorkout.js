@@ -248,24 +248,27 @@ export default class ModifyWorkout extends Component {
             editable = {true}
             returnKeyType='done'
             ></TextInput>
-          {this.state.workout.map((m, i) => <WorkoutMove key={m.id}
+          {this.state.workout.length > 0? this.state.workout.map((m, i) => <WorkoutMove key={m.id}
                                                          move={m}
                                                          onRemove={this.handleRemove}
                                                          submitDuration={this.submitDuration}
                                                          submitMode={this.submitMode}
-                                                          />)}
+                                                          />) :
+          <Text style={styles.moveText}>No moves yet. Go back and add some!</Text>}
         </View>
         </ScrollView>
         <View style={styles.controlContainer}>
           <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
             <Text style={styles.playBtnText}>Add</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayWorkout})}>
-            <Text style={styles.playBtnText}>Play</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.controlBtn}>
-            <Text style={styles.playBtnText}>Save</Text>
-          </TouchableOpacity>
+          { this.state.workout.length > 0?
+            <View>
+            <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayWorkout})}>
+              <Text style={styles.playBtnText}>Play</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.controlBtn}>
+              <Text style={styles.playBtnText}>Save</Text>
+            </TouchableOpacity> </View>: null }
         </View>
       </View>
     )
