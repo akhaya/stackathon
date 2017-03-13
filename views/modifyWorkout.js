@@ -261,14 +261,12 @@ export default class ModifyWorkout extends Component {
           <TouchableOpacity style={styles.controlBtn} onPress={this.handleAddMore}>
             <Text style={styles.playBtnText}>Add</Text>
           </TouchableOpacity>
-          { this.state.workout.length > 0?
-            <View>
             <TouchableOpacity style={styles.controlBtn} onPress={() => this.props.navigator.push({component: PlayWorkout})}>
               <Text style={styles.playBtnText}>Play</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.controlBtn}>
               <Text style={styles.playBtnText}>Save</Text>
-            </TouchableOpacity> </View>: null }
+            </TouchableOpacity>
         </View>
       </View>
     )
