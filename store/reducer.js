@@ -43,15 +43,10 @@ export const updateMode = (moveId, mode) => {
 }
 
 // REDUCER
-const counter = 2
+const counter = 1
 const initialState = {
-  name: 'Sample Workout',
-  workout: [{
-    id: 1,
-    move: 'Burpees',
-    mode: 'Reps',
-    duration: 10
-  }]
+  name: 'My New Workout',
+  workout: []
 }
 
 const reducer = (state = initialState, action) => {
